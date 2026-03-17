@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('bundles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->dateTime('start time');
+            $table->dateTime('start_time');
             $table->time('duration');
+            $table->double('value');
             $table->string('description', 1000);
             $table->unsignedBigInteger('category_id');
 

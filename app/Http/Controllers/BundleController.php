@@ -10,17 +10,21 @@ class BundleController extends Controller
 
     public function createBundle(Request $request){
         $validated= $request->validate([
-            'name'=>'required|string',
-            'start_Date'=>'required|string',
-            'latitude'=>'required|string',
-            'description'=>'string|max:1000.',
+            'name'=>'required|string|unique:bundles,name',
+            'start_time'=>'required|string',
+            'duration'=>'required|string',
+            'description'=>'required|string|max:1000',
+            'category_id'=>'required|exists:categories,id',
+            
         ]);
 
         $bundle = new Bundle();
         $bundle->name = $validated['name'];
-        $bundle->name = $validated['longitude'];
-        $bundle->name = $validated['latitude'];
-        $bundle->description = $validated('description');
+        $bundle->start_time = $validated['start_time'];
+        $bundle->duration = $validated['duration'];
+        $bundle->value = $validated['value'];
+        $bundle->description = $validated['description'];
+        $bundle->category_id = $validated['category_id'];
 
         try{
             $bundle->save();

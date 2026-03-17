@@ -11,9 +11,10 @@ class Bundle extends Model
     protected $fillable=[
         'name',
         'start_time',
-        'description',
         'duration',
-        'category_id'
+        'value',
+        'description',
+        'category_id',
 
         ];
 }
