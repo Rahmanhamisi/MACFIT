@@ -10,6 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserOtpController;
 use App\Http\Controllers\VerifyEmailController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,6 @@ Route::post('/verify-otp', [UserOtpController::class, 'verifyOtp']);
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'verify'])
     ->name('verification.verify')
     ->middleware(['signed', 'throttle:6,1']);
-
-Route::post('/email/resend', [ResendEmailVerificationController::class, 'resend'])
-    ->middleware('throttle:6,1');
 
 //protected routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -71,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/deleteSubscription/{id}', [SubscriptionController::class, 'deleteSubscription']);
     
     Route::get('/userCharges', [SubscriptionController::class, 'getUserCharges']);
+
+    Route::resource('users', UserController::class);
 
     
 });

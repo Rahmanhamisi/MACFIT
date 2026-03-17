@@ -2,100 +2,113 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Equipment;
+use Illuminate\Http\Request;
 
 class EquipmentController extends Controller
 {
-    // Create
-    public function createEquipment(Request $request)
-    {
+    //CRUD FUNCTIONS
+    //Create
+    public function createEquipment(Request $request){
         $validated = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string|max:1000',
+            'name'=>'required|string',
+            'usage'=>'required|string|max:1000',
+            'model_no'=>'required|string|unique:equipment,model_no',
+            'value'=>'required',
+            'status'=>'required|string'
         ]);
 
-        try {
-            $equipment = new Equipment();
-            $equipment->name = $validated['name'];
-            $equipment->description = $validated['description'] ?? null;
+        $equipment = new Equipment();
+        $equipment->name = $validated['name'];
+        $equipment->usage = $validated['usage'];
+        $equipment->model_no = $validated['model_no'];
+        $equipment->value = $validated['value'];
+        $equipment->status = $validated['status'];
+        try{
             $equipment->save();
-
-            return response()->json($equipment, 201);
-        } catch (\Exception $exception) {
             return response()->json([
-                'error' => 'Failed to save Equipment',
-                'message' => $exception->getMessage()
-            ], 500);
+                'message'=>'Equipment Saved Successfully.'
+            ], 200);
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'error'=>'Failed to Save a Equipment.',
+                'message'=>$exception->getMessage()
+            ], 200);
         }
     }
 
-    // Read All
-    public function readAllEquipments()
-    {
-        try {
+    //Read All Equipments
+    public function readAllEquipments(){
+        try{
             $equipments = Equipment::all();
             return response()->json($equipments);
-        } catch (\Exception $exception) {
+        }
+        catch(\Exception $exception){
             return response()->json([
-                'error' => 'Failed to fetch Equipments',
-                'message' => $exception->getMessage()
-            ], 500);
+                'error'=>'Failed to fetch Equipments.',
+                'message'=>$exception->getMessage()
+            ], 200);
         }
     }
 
-    // Read One
-    public function readEquipment($id)
-    {
-        try {
+
+    //Read Equipment(id)
+    public function readEquipment($id){
+        try{
             $equipment = Equipment::findOrFail($id);
             return response()->json($equipment);
-        } catch (\Exception $exception) {
+        }
+        catch(\Exception $exception){
             return response()->json([
-                'error' => 'Failed to fetch the equipment',
-                'message' => $exception->getMessage()
-            ], 500);
+                'error'=>'Failed to fetch the Equipment.',
+                'message'=>$exception->getMessage()
+            ], 200);
         }
     }
 
-    // Update
-    public function updateEquipment(Request $request, $id)
-    {
+    //Update equipment(id)
+    public function updateEquipment(Request $request, $id){
         $validated = $request->validate([
-            'name' => 'required|string',
-            'description' => 'nullable|string|max:1000',
+            'name'=>'required|string',
+            'usage'=>'required|string|max:1000',
+            'model_no'=>'required|string|unique:equipment,model_no',
+            'value'=>'required|number',
+            'status'=>'required|string'
         ]);
 
-        try {
-            $equipment = Equipment::findOrFail($id);
-            $equipment->name = $validated['name'];
-            $equipment->description = $validated['description'] ?? null;
+        $equipment = Equipment::findOrFail($id);
+        $equipment->name = $validated['name'];
+        $equipment->usage = $validated['usage'];
+        $equipment->model_no = $validated['model_no'];
+        $equipment->value = $validated['value'];
+        $equipment->status = $validated['status'];
+        try{
             $equipment->save();
-
-            return response()->json($equipment);
-        } catch (\Exception $exception) {
             return response()->json([
-                'error' => 'Failed to update the equipment',
-                'message' => $exception->getMessage()
-            ], 500);
+                'message'=>'Equipment Updated Successfully.'
+            ], 200);
+        }
+        catch(\Exception $exception){
+            return response()->json([
+                'error'=>'Failed to Update the Equipment.',
+                'message'=>$exception->getMessage()
+            ], 200);
         }
     }
 
-    // Delete
-    public function deleteEquipment($id)
-    {
-        try {
+    //Delete equipment(id)
+    public function deleteEquipment($id){
+        try{
             $equipment = Equipment::findOrFail($id);
             $equipment->delete();
-
+            return response('Equipment Deleted Successfully');
+        }
+        catch(\Exception $exception){
             return response()->json([
-                'message' => 'Equipment deleted successfully'
-            ]);
-        } catch (\Exception $exception) {
-            return response()->json([
-                'error' => 'Failed to delete the equipment',
-                'message' => $exception->getMessage()
-            ], 500);
+                'error'=>'Failed to Delete the Equipment.',
+                'message'=>$exception->getMessage()
+            ], 200);
         }
     }
 }
