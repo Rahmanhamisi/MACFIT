@@ -3,36 +3,49 @@
 namespace App\Policies;
 
 use App\Models\Role;
-use App\Models\User\User;
-use App\Models\User\User as ModelsUser;
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 
 class RolePolicy
 {
+    public function __construct() {}
 
-    public function _construct() {}
-
-    public function viewAny(ModelsUser $user)
+    /**
+     * View all roles
+     */
+    public function viewAny(User $user)
     {
-        return $user->role?->id === 1;
-    }
-    public function view(AuthUser $user, Role $model)
-    {
-        return $user->id === $model->id || $user->isAdmin();
+        return $user->role?->id === 1; // Admin only
     }
 
-    public function create(?User $user)
+    /**
+     * View a specific role
+     */
+    public function view(User $user, Role $role)
     {
-        return true;
+        return $user->role?->id === 1; // Admin only
     }
 
-    public function update(User $user, User $model)
+    /**
+     * Create role
+     */
+    public function create(User $user)
     {
-        return $user->id === $model->id || $user->role->id === 1;
+        return $user->role?->id === 1; // Admin only
     }
 
-    public function delete(User $user)
+    /**
+     * Update role
+     */
+    public function update(User $user, Role $role)
     {
-        return $user->role->id === 1;
+        return $user->role?->id === 1; // Admin only
+    }
+
+    /**
+     * Delete role
+     */
+    public function delete(User $user, Role $role)
+    {
+        return $user->role?->id === 1; // Admin only
     }
 }

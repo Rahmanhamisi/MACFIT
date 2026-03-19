@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('usage', 1000);
             $table->string('model_no');
             $table->double('value');
-            $table->double('status');
+            $table->string('status');
             $table->timestamps();
         });
     }

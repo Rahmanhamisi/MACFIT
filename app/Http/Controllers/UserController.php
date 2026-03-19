@@ -32,6 +32,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            
             'name'=>'required|string',
             'email'=>'required|email|unique:users,email',
             'phoneNumber'=>'nullable|string',
@@ -54,7 +55,7 @@ class UserController extends Controller
 
             $user->save();
 
-        return response()->json(['message' => 'Role Saved Successfully.'], 200);
+        return response()->json(['message' => 'User Successfully.'], 200);
     }
 
     /**
